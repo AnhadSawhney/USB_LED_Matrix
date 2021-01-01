@@ -1,4 +1,4 @@
-// STM32F4
+// STM32F4Discovery
 #define HSE_VALUE ((uint32_t)8000000)
 #include "main.h"
 #include "systick.h"
