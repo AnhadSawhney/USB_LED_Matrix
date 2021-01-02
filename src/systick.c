@@ -22,7 +22,7 @@ void delay_ms(uint32_t t) {
   uint32_t start = millis();
   do {
     elapsed = millis() - start;
-  } while (millis() - start < t) ;
+  } while (elapsed < t) ;
 }
 
 void SysTick_Handler(void) {
