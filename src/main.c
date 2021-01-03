@@ -4,7 +4,7 @@
 #include "systick.h"
 #include "led.h"
 #include "init.h"
-//#include "cdc_loop.h"
+#include "cdc_loop.h"
 
 uint32_t c;
 uint8_t *nextBuffer;
@@ -29,5 +29,11 @@ int main(void) {
         c %= WIDTH;
         //while(millis() - start_time < 100);
     }
+    /*cdc_init_usbd();
+    usbd_enable(&udev, true);
+    usbd_connect(&udev, true);
+    while(1) {
+        usbd_poll(&udev);
+    }*/
     return 0;
 }
