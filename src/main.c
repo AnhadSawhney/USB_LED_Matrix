@@ -29,11 +29,5 @@ int main(void) {
         c %= WIDTH;
         //while(millis() - start_time < 100);
     }
-    /*cdc_init_usbd();
-    usbd_enable(&udev, true);
-    usbd_connect(&udev, true);
-    while(1) {
-        usbd_poll(&udev);
-    }*/
     return 0;
 }
