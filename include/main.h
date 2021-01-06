@@ -1,8 +1,15 @@
 #pragma once
-#include "stm32f4xx.h"
-#include <stdint.h>
 
-#define row_mask 0x1F
+#include <libopencm3/cm3/common.h>
+#include <libopencm3/stm32/rcc.h>
+#include <libopencm3/stm32/gpio.h>
+#include <libopencm3/stm32/timer.h>
+#include <libopencm3/cm3/nvic.h>
+#include <libopencm3/stm32/dac.h>
+#include <libopencm3/stm32/dma.h>
+#include <libopencm3/stm32/flash.h>
+
+#define row_mask 0x1F //0b00011111
 
 #define PRESCALE 0
 
@@ -20,7 +27,7 @@
 
 inline void _error_handler(void) {while(1);};
 
-/*extern*/ volatile uint8_t bit;
-/*extern*/ volatile uint8_t row;
-/*extern*/ volatile uint8_t busyFlag;
-/*extern*/ volatile uint32_t frame_count;
+extern volatile uint8_t bit;
+extern volatile uint8_t row;
+extern volatile uint8_t busyFlag;
+extern volatile uint32_t frame_count;

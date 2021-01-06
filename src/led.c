@@ -7,11 +7,11 @@ RGB_t frame[WIDTH*HEIGHT];
 uint8_t buffer1[WIDTH*BITS_PER_CHANNEL*SCAN_RATE];
 uint8_t buffer2[WIDTH*BITS_PER_CHANNEL*SCAN_RATE];
 
-float mapf(float value, float c_min, float c_max, float t_min, float t_max) {
+static float mapf(float value, float c_min, float c_max, float t_min, float t_max) {
     return (value - c_min) / (c_max - c_min) * (t_max - t_min) + t_min;
 }
 
-float clampf(float value, float max, float min) {
+static float clampf(float value, float max, float min) {
     return fmaxf(fminf(value, max), min);
 }
 

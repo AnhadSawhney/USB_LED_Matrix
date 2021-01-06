@@ -1,16 +1,13 @@
 #include "systick.h"
 
-#include <stdint.h>
-
-#include "stm32f4xx.h"
-
 volatile uint32_t ticks;
 
 // Call this after setting up the clock
 void SysTick_Init(void) {
     // Enable the SysTick interrupt every 1ms
-    SysTick_Config(SystemCoreClock / 1000);
-    NVIC_EnableIRQ(SysTick_IRQn);
+    systick_set_frequency(1000, rcc_ahb_frequency);
+	  systick_counter_enable();
+	  systick_interrupt_enable();
 }
 
 uint32_t millis(void) {
@@ -25,6 +22,6 @@ void delay_ms(uint32_t t) {
   } while (elapsed < t) ;
 }
 
-void SysTick_Handler(void) {
+void sys_tick_handler(void) {
     ticks++;
 }
