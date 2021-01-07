@@ -4,6 +4,3 @@
 #include <libopencm3/stm32/dbgmcu.h>
 
 void init(void);
-void initDMA(void);
-void initGPIO(void);
-void initTimers(void);

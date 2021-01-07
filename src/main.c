@@ -4,16 +4,20 @@
 #include "systick.h"
 #include "led.h"
 #include "init.h"
+#include "cdcacm.h"
 
 volatile uint8_t bit;
 volatile uint8_t row;
 volatile uint8_t busyFlag;
 volatile uint32_t frame_count;
+uint8_t usbd_control_buffer[128];
+usbd_device *usbd_dev;
 
 uint8_t *nextBuffer;
 
 int main(void) {
     init();
+    initUSB();
     rcc_periph_clock_enable(RCC_GPIOD);
     gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO11 | GPIO12 | GPIO13 | GPIO14 | GPIO15);
     gpio_clear(GPIOD, GPIO11 | GPIO12 | GPIO13 | GPIO14 | GPIO15);
@@ -32,11 +36,13 @@ int main(void) {
         LED_waveEffect(frame);
         //LED_gradient(frame);
         //LED_Lines(frame, c);
-        //while(millis() - start_time < 100);
+        //while(millis() - start_time < 30);
         gpio_clear(GPIOD, 1<<i);
         i++;
         if(i > 15) i = 11;
         gpio_set(GPIOD, 1<<i);
+
+        usbd_poll(usbd_dev);
     }
     return 0;
 }
