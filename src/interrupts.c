@@ -11,8 +11,33 @@ void tim5_isr(void) {
     if(bit == 0) { // the first 64 bits of a new row have been latched. Set the row select to match.
         //GPIOB->ODR = (GPIOB->ODR & ~(row_mask)) | row;
         //gpio_clear(GPIOB, row_mask);
-        //gpio_set(GPIOB, row);
-        gpio_port_write(GPIOB, row);
+        //gpio_port_write(GPIOB, row); // This works for panels that are direct row select. 
+
+        // Certain panels are (ABC Shift + DE direct)
+        // The SM5266RowAddressSetter (ABC Shifter + DE direct) sets bits ABC using
+        // a 8 bit shifter and DE directly. The panel this works with has 8 SM5266
+        // shifters (4 for the top 32 rows and 4 for the bottom 32 rows).
+        // DE is used to select the active shifter
+        // (rows 1-8/33-40, 9-16/41-48, 17-24/49-56, 25-32/57-64).
+        // Rows are enabled by shifting in 8 bits (high bit first) with a high bit
+        // enabling that row. This allows up to 8 rows per group to be active at the
+        // same time (if they have the same content), but that isn't implemented here.
+        // BK, DIN and DCK are the designations on the SM5266P datasheet.
+        // BK = Enable Input, DIN = Serial In, DCK = Clock
+
+        //D = PB3, E = PB4
+        (row & 1<<3)? gpio_set(GPIOB, GPIO3) : gpio_clear(GPIOB, GPIO3);
+        (row & 1<<4)? gpio_set(GPIOB, GPIO4) : gpio_clear(GPIOB, GPIO4);
+
+        gpio_set(GPIOB, GPIO2); // Enable serial input for the shifter, BK = C = PB2
+        for (int r = 7; r >= 0; r--) {
+            (row % 8 == r) ? gpio_set(GPIOB, GPIO1) : gpio_clear(GPIOB, GPIO1); // DIN = B = PB1
+            gpio_set(GPIOB, GPIO0); // DIN = A = PB0
+            //gpio_set(GPIOB, GPIO0);  // Longer clock time; tested with Pi3
+            gpio_clear(GPIOB, GPIO0);
+        }
+        gpio_clear(GPIOB, GPIO2); // Disable serial input to keep unwanted bits out of the shifters
+
         row++;
         row &= row_mask;
     }

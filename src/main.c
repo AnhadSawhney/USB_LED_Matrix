@@ -32,17 +32,17 @@ int main(void) {
         nextBuffer = current_buffer ? buffer2 : buffer1;
         while(busyFlag);
         busyFlag = 1;
+        //usbd_poll(usbd_dev);
+        //LED_Lines(frame);
+        //LED_Pixel(frame);
+        LED_plasmaEffect(frame);
+        //LED_waveEffect(frame);
         LED_fillBuffer(frame, nextBuffer);
-        LED_waveEffect(frame);
-        //LED_gradient(frame);
-        //LED_Lines(frame, c);
         //while(millis() - start_time < 30);
         gpio_clear(GPIOD, 1<<i);
         i++;
         if(i > 15) i = 11;
         gpio_set(GPIOD, 1<<i);
-
-        usbd_poll(usbd_dev);
     }
     return 0;
 }

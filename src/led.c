@@ -39,16 +39,59 @@ void LED_waveEffect(RGB_t *frame) {
     time += 0.1;
 }
 
-void LED_Lines(RGB_t *frame, uint8_t a) {
+void LED_waveEffectVertical(RGB_t *frame) {
+    static float time;
+    float yy;
+    uint8_t r, g, b;
+
+    if(time > 2*M_PI) {
+        time = 0.0;
+    }
+
+    for(uint8_t y = 0; y < HEIGHT; y++) {
+        yy = mapf(y, 0, HEIGHT-1, 0, 2*M_PI);
+        r = 16 + 100 * (clampf(sinf(yy + time + 2*M_PI/3), 0.5, -0.5) + 0.5);
+        g = 16 + 100 * (clampf(sinf(yy + time - 2*M_PI/3), 0.5, -0.5) + 0.5);
+        b = 16 + 100 * (clampf(sinf(yy + time         ), 0.5, -0.5) + 0.5);
+        for(uint8_t x = 0; x < WIDTH; x++) {
+            PIXEL(frame, x, y).R = r;
+            PIXEL(frame, x, y).G = g;
+            PIXEL(frame, x, y).B = b;
+        }
+    }
+    time += 0.1;
+}
+
+void LED_Pixel(RGB_t *frame) {
+    static int t;
+    frame[t].R = 0;
+    frame[t].G = 0;
+    frame[t].B = 0;
+    t++;
+    if(t >= WIDTH*HEIGHT) {
+        t = 0;
+    }
+    frame[t].R = 255;
+    frame[t].G = 255;
+    frame[t].B = 255;
+}
+
+void LED_Lines(RGB_t *frame) {
     for(uint8_t y = 0; y < HEIGHT; y++) {
         for(uint8_t x = 0; x < WIDTH; x++) {
-            if(x == a) {
+            if(x == 10) {
                 PIXEL(frame, x, y).R = 255;
-                PIXEL(frame, x, y).G = 255;
-                PIXEL(frame, x, y).B = 255;
             } else {
                 PIXEL(frame, x, y).R = 0;
+            }
+            if(y == 10) {
+                PIXEL(frame, x, y).G = 255;
+            } else {
                 PIXEL(frame, x, y).G = 0;
+            }
+            if(x == y) {
+                PIXEL(frame, x, y).B = 255;
+            } else {
                 PIXEL(frame, x, y).B = 0;
             }
         }
