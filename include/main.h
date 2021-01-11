@@ -30,6 +30,6 @@ inline void _error_handler(void) {while(1);};
 extern volatile uint8_t bit;
 extern volatile uint8_t row;
 extern volatile uint8_t busyFlag;
-extern volatile uint32_t frame_count;
+//extern volatile uint32_t frame_count;
 //extern volatile uint32_t received_length;
 //extern volatile uint8_t buffer_usb[];

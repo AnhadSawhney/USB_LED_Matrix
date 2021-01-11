@@ -9,7 +9,7 @@
 volatile uint8_t bit;
 volatile uint8_t row;
 volatile uint8_t busyFlag;
-volatile uint32_t frame_count;
+//volatile uint32_t frame_count;
 uint8_t usbd_control_buffer[128];
 usbd_device *usbd_dev;
 
@@ -23,9 +23,9 @@ int main(void) {
     init();
     initUSB();
     rcc_periph_clock_enable(RCC_GPIOD);
-    gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO11 | GPIO12 | GPIO13 | GPIO14 | GPIO15);
-    gpio_clear(GPIOD, GPIO11 | GPIO12 | GPIO13 | GPIO14 | GPIO15);
-    uint8_t i = 11;
+    gpio_mode_setup(GPIOD, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO12 | GPIO13 | GPIO14 | GPIO15);
+    gpio_clear(GPIOD, GPIO12 | GPIO13 | GPIO14 | GPIO15);
+    uint8_t i = 12;
     uint32_t current_buffer, start_time;
     while(1) {
         start_time = millis();
@@ -37,16 +37,18 @@ int main(void) {
         while(busyFlag);
         busyFlag = 1;
         
-        //LED_Lines(frame);
+        LED_Lines(frame);
         //LED_Pixel(frame);
-        //LED_waveEffect(frame);
+        //LED_plasmaEffect(frame);
         //LED_waveEffect(frame);
         LED_fillBuffer(frame, nextBuffer);
         //if(index > WIDTH*HEIGHT*3) index = 0;
-        //while(millis() - start_time < 30);
+        while(millis() - start_time < 16);
         gpio_clear(GPIOD, 1<<i);
         i++;
-        if(i > 15) i = 11;
+        if(i > 15) {
+            i = 12;
+        } 
         gpio_set(GPIOD, 1<<i);
     }
     return 0;

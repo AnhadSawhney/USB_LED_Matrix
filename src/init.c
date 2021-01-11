@@ -86,14 +86,14 @@ static void initTimers(void) {
     rcc_periph_clock_enable(RCC_TIM5); 
     timer_slave_set_trigger(TIM5, TIM_SMCR_TS_ITR3); // select ITR3 as the trigger input (for TIM5, this is TIM8) 
     timer_slave_set_mode(TIM5, TIM_SMCR_SMS_TM); // slave mode set to trigger mode
-    timer_set_period(TIM5, 1279);
+    timer_set_period(TIM5,  1279); //TODO: GENERALIZE
 
     timer_set_oc_mode(TIM5, TIM_OC1, TIM_OCM_PWM1); //PWM mode 1
     timer_set_oc_value(TIM5, TIM_OC1, 12);
     timer_enable_oc_output(TIM5, TIM_OC1); // OC1 enabled
 
     timer_set_oc_mode(TIM5, TIM_OC2, TIM_OCM_PWM1); //PWM mode 1
-    timer_set_oc_value(TIM5, TIM_OC2, 1280); // start with OC2 (OE) held at 1 (off)
+    timer_set_oc_value(TIM5, TIM_OC2, 1280); // start with OC2 (OE) held at 1 (off) //TODO: GENERALIZE
     timer_enable_oc_preload(TIM5, TIM_OC2); // preload enabled for CCR2
     timer_enable_oc_output(TIM5, TIM_OC2); // OC2 enabled
 
@@ -111,7 +111,7 @@ static void initTimers(void) {
 
     timer_enable_counter(TIM8);
     
-    timer_set_oc_value(TIM5, TIM_OC2, 1280 - BRIGHTNESS); // put the first value in CCR2 preload it will be loaded at the first UEV
+    timer_set_oc_value(TIM5, TIM_OC2, 1280 - BRIGHTNESS); // put the first value in CCR2 preload it will be loaded at the first UEV //TODO: GENERALIZE
 }
 
 void init(void) {
