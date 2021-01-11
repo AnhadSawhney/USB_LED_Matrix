@@ -15,6 +15,10 @@ usbd_device *usbd_dev;
 
 uint8_t *nextBuffer;
 
+void otg_fs_isr(void) {
+	usbd_poll(usbd_dev);
+}
+
 int main(void) {
     init();
     initUSB();
@@ -32,12 +36,13 @@ int main(void) {
         nextBuffer = current_buffer ? buffer2 : buffer1;
         while(busyFlag);
         busyFlag = 1;
-        //usbd_poll(usbd_dev);
+        
         //LED_Lines(frame);
         //LED_Pixel(frame);
-        LED_plasmaEffect(frame);
+        //LED_waveEffect(frame);
         //LED_waveEffect(frame);
         LED_fillBuffer(frame, nextBuffer);
+        //if(index > WIDTH*HEIGHT*3) index = 0;
         //while(millis() - start_time < 30);
         gpio_clear(GPIOD, 1<<i);
         i++;

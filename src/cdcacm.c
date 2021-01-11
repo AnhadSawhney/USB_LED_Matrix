@@ -5,19 +5,37 @@
 static void usbdev_data_rx_cb(usbd_device *usbd_dev, uint8_t ep) {
 	(void)ep;
 
-	//char buf[WIDTH*HEIGHT*3];
-	int len = usbd_ep_read_packet(usbd_dev, 0x01, frame, WIDTH*HEIGHT*3);
+	int len;
+	uint8_t buf[64];
+	static int color, y;
+	len = usbd_ep_read_packet(usbd_dev, 0x01, buf, 64);
+	for(int i = 0; i < len; i++) {
+		if(color == 0) PIXEL(frame, i, y).R = buf[i];
+		if(color == 1) PIXEL(frame, i, y).G = buf[i];
+		if(color == 2) PIXEL(frame, i, y).B = buf[i];
+	}
+	color++;
+	if(color >= 3) {
+		color = 0;
+		y++;
+	}
+	if(y >= HEIGHT) y = 0;
 }
 
 static void usbdev_set_config(usbd_device *usbd_dev, uint16_t wValue) {
 	(void)wValue;
 
-	usbd_ep_setup(usbd_dev, 0x01, USB_ENDPOINT_ATTR_BULK, 64, usbdev_data_rx_cb);
-	usbd_ep_setup(usbd_dev, 0x82, USB_ENDPOINT_ATTR_BULK, 64, NULL);
-	usbd_ep_setup(usbd_dev, 0x83, USB_ENDPOINT_ATTR_INTERRUPT, 16, NULL);
+	//IN (to host) endpoints 0x81 to 0x87
+	//OUT (to device) endpoints 0x01 to 0x0F
+
+	//endpoint 0x00 reserved for control
+	usbd_ep_setup(usbd_dev, 0x01, USB_ENDPOINT_ATTR_BULK, 64, usbdev_data_rx_cb); //OUT
+	//usbd_ep_setup(usbd_dev, 0x02, USB_ENDPOINT_ATTR_ISOCHRONOUS, 768, NULL); //OUT, 768 bytes = 4 rows, max 1023
+	usbd_ep_setup(usbd_dev, 0x82, USB_ENDPOINT_ATTR_BULK, 64, NULL); //IN 
 }
 
 void initUSB(void) { 
+	nvic_enable_irq(NVIC_OTG_FS_IRQ);
     rcc_periph_clock_enable(RCC_OTGFS); //GPIOA must be inited before this 
     
     gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO11 | GPIO12); // enable USB pins
