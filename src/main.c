@@ -9,7 +9,6 @@
 volatile uint8_t bit;
 volatile uint8_t row;
 volatile uint8_t busyFlag;
-//volatile uint32_t frame_count;
 uint8_t usbd_control_buffer[128];
 usbd_device *usbd_dev;
 
@@ -37,13 +36,12 @@ int main(void) {
         while(busyFlag);
         busyFlag = 1;
         
-        LED_Lines(frame);
+        //LED_Lines(frame);
         //LED_Pixel(frame);
-        //LED_plasmaEffect(frame);
+        LED_plasmaEffect(frame);
         //LED_waveEffect(frame);
         LED_fillBuffer(frame, nextBuffer);
         //if(index > WIDTH*HEIGHT*3) index = 0;
-        while(millis() - start_time < 16);
         gpio_clear(GPIOD, 1<<i);
         i++;
         if(i > 15) {

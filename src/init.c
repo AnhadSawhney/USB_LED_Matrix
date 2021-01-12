@@ -70,7 +70,7 @@ static void initTimers(void) {
     timer_enable_irq(TIM8, TIM_DIER_CC1DE); // DMA request on CH1 (falling edge of clock)
     timer_set_oc_value(TIM8, TIM_OC1, 10);
     timer_enable_break_main_output(TIM8); // Main output enabled.. if this isn't set, there is no output on the pins!
-    timer_set_prescaler(TIM8, (PRESCALE+1)*2-1); // scale down for testing
+    timer_set_prescaler(TIM8, (PRESCALE+1)*2*ASPECT_RATIO-1); // scale down for testing
     timer_generate_event(TIM8, TIM_EGR_UG); // trigger a UEV to update the preload, auto-reload, and capture-compare shadow registers
     timer_clear_flag(TIM8, 0x1FFF); //clear all flags
     timer_set_master_mode(TIM8, TIM_CR2_MMS_UPDATE); // Master mode - update
@@ -139,6 +139,5 @@ void init(void) {
     //MMIO32(DBGMCU_BASE + 0x0C) |= 0x2;
 
     initTimers();
-    initUSB();
     busyFlag = 1;
 }

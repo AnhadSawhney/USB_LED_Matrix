@@ -63,7 +63,7 @@ void LED_waveEffectVertical(RGB_t *frame) {
 }
 
 void LED_Pixel(RGB_t *frame) {
-    static int t;
+    static uint32_t t;
     frame[t].R = 0;
     frame[t].G = 0;
     frame[t].B = 0;
@@ -77,14 +77,15 @@ void LED_Pixel(RGB_t *frame) {
 }
 
 void LED_Lines(RGB_t *frame) {
-    for(uint8_t y = 0; y < HEIGHT; y++) {
-        for(uint8_t x = 0; x < WIDTH; x++) {
-            if(x == 10) {
+    static uint32_t t;
+    for(uint32_t y = 0; y < HEIGHT; y++) {
+        for(uint32_t x = 0; x < WIDTH; x++) {
+            if(x == t) {
                 PIXEL(frame, x, y).R = 255;
             } else {
                 PIXEL(frame, x, y).R = 0;
             }
-            if(y == 10) {
+            if(y == t) {
                 PIXEL(frame, x, y).G = 255;
             } else {
                 PIXEL(frame, x, y).G = 0;
@@ -95,6 +96,10 @@ void LED_Lines(RGB_t *frame) {
                 PIXEL(frame, x, y).B = 0;
             }
         }
+    }
+    t++;
+    if(t >= HEIGHT) {
+        t = 0;
     }
 }
 
@@ -161,7 +166,7 @@ void LED_fillBuffer(RGB_t *frame, uint8_t *buffer) {
         p2 = p1 + WIDTH * SCAN_RATE;
         for(bit = 0; bit < BITS_PER_CHANNEL; bit++) {
             mask = 1<<bit;
-            for(uint8_t col = 0; col < WIDTH; col++) {
+            for(uint32_t col = 0; col < WIDTH; col++) {
                 #ifdef GAMMA_LUT_ENABLE
                     buffer[i] =
                         ((((gammaR[frame[p2+col].R]) & mask) >> bit) << 5) |

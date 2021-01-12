@@ -11,13 +11,14 @@
 
 #define row_mask 0x1F //0b00011111
 
-#define PRESCALE 0
+#define PRESCALE 1
 
 #define BITS_PER_PIXEL 24
 #define BITS_PER_CHANNEL 8
 
-#define WIDTH 64
+#define WIDTH 128
 #define HEIGHT 64
+#define ASPECT_RATIO HEIGHT/WIDTH
 #define SCAN_RATE 32 // this is a 1/32 display
 
 #define BRIGHTNESS 10 // this can be from 1 to 10
@@ -30,6 +31,5 @@ inline void _error_handler(void) {while(1);};
 extern volatile uint8_t bit;
 extern volatile uint8_t row;
 extern volatile uint8_t busyFlag;
-//extern volatile uint32_t frame_count;
 //extern volatile uint32_t received_length;
 //extern volatile uint8_t buffer_usb[];

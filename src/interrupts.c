@@ -50,6 +50,5 @@ void tim5_isr(void) {
 void dma2_stream2_isr(void) { // triggers when DMA transfer is complete
     //DMA2->LIFCR |= DMA_LIFCR_CTCIF2; // make sure the interrupt flag is clear
     dma_clear_interrupt_flags(DMA2, DMA_STREAM2, DMA_TCIF);
-    //frame_count++;
     busyFlag = 0; // main loop watches this flag to know when to fill up the next buffer
 }
