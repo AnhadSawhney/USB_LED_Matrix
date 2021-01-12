@@ -25,9 +25,9 @@ PA0 | LAT | Latch pixel data
 PA1 | OE | Output enable (duty cycle changes for PWM)
 
 Optional / Built in to discovery board:
-STM32 | HUB75 LED Matrix | Purpose
------------- | ------------- | -------------
-PD12 | LED | Heartbeat
-PD13 | LED | Heartbeat
-PD14 | LED | Heartbeat
-PD15 | LED | Heartbeat
+STM32 | Purpose
+------------ | -------------
+PD12 | Heartbeat LED
+PD13 | Heartbeat LED
+PD14 | Heartbeat LED
+PD15 | Heartbeat LED
