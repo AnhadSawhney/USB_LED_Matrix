@@ -7,21 +7,20 @@ static void usbdev_data_rx_cb(usbd_device *usbd_dev, uint8_t ep) {
 
 	int len;
 	uint8_t buf[64];
-	static int index, color, y;
+	static uint8_t color;
+	static uint32_t index;
 	len = usbd_ep_read_packet(usbd_dev, 0x01, buf, 64);
-	index += len;
-	for(int i = 0; i < len; i++) {
-		if(color == 0) PIXEL(frame, index+i, y).R = buf[i];
-		if(color == 1) PIXEL(frame, index+i, y).G = buf[i];
-		if(color == 2) PIXEL(frame, index+i, y).B = buf[i];
+	for(uint8_t i = 0; i < len; i++) {
+		if(color == 0) frame[index+i].R = buf[i];
+		if(color == 1) frame[index+i].G = buf[i];
+		if(color == 2) frame[index+i].B = buf[i];
 	}
-	if(index >= WIDTH) {
+	index += len;
+	if(index >= WIDTH*HEIGHT) {
 		index = 0;
 		color++;
-		if(color >= 3) {
+		if(color > 2) {
 			color = 0;
-			y++;
-			if(y >= HEIGHT) y = 0;
 		}
 	}
 }

@@ -38,7 +38,7 @@ int main(void) {
         
         //LED_Lines(frame);
         //LED_Pixel(frame);
-        LED_plasmaEffect(frame);
+        //LED_plasmaEffect(frame);
         //LED_waveEffect(frame);
         LED_fillBuffer(frame, nextBuffer);
         //if(index > WIDTH*HEIGHT*3) index = 0;

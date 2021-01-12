@@ -161,28 +161,31 @@ void LED_plasmaEffect(RGB_t *frame) {
 void LED_fillBuffer(RGB_t *frame, uint8_t *buffer) {
     uint32_t i = 0, p1, p2;
     uint8_t bit, mask;
+    RGB_t a, b;
     for(uint8_t row = 0; row < SCAN_RATE; row++) {
         p1 = row * WIDTH;
         p2 = p1 + WIDTH * SCAN_RATE;
         for(bit = 0; bit < BITS_PER_CHANNEL; bit++) {
             mask = 1<<bit;
-            for(uint32_t col = 0; col < WIDTH; col++) {
+            for(uint32_t x = 0; x < WIDTH; x++) { // int x = WIDTH - 1; x >= 0; x--
+                a = frame[p2+x];
+                b = frame[p1+x];
                 #ifdef GAMMA_LUT_ENABLE
                     buffer[i] =
-                        ((((gammaR[frame[p2+col].R]) & mask) >> bit) << 5) |
-                        ((((gammaG[frame[p2+col].G]) & mask) >> bit) << 4) |
-                        ((((gammaB[frame[p2+col].B]) & mask) >> bit) << 3) |
-                        ((((gammaR[frame[p1+col].R]) & mask) >> bit) << 2) |
-                        ((((gammaG[frame[p1+col].G]) & mask) >> bit) << 1) |
-                        ((((gammaB[frame[p1+col].B]) & mask) >> bit) << 0);     //R2 G2 B2 R1 G1 B1
+                        ((((gammaR[a.R]) & mask) >> bit) << 5) |
+                        ((((gammaG[a.G]) & mask) >> bit) << 4) |
+                        ((((gammaB[a.B]) & mask) >> bit) << 3) |
+                        ((((gammaR[b.R]) & mask) >> bit) << 2) |
+                        ((((gammaG[b.G]) & mask) >> bit) << 1) |
+                        ((((gammaB[b.B]) & mask) >> bit) << 0);     //R2 G2 B2 R1 G1 B1
                 #else
                     buffer[i] =
-                    (((frame[p2+col].R & mask) >> bit) << 5) |
-                    (((frame[p2+col].G & mask) >> bit) << 4) |
-                    (((frame[p2+col].B & mask) >> bit) << 3) |
-                    (((frame[p1+col].R & mask) >> bit) << 2) |
-                    (((frame[p1+col].G & mask) >> bit) << 1) |
-                    (((frame[p1+col].B & mask) >> bit) << 0);     //R2 G2 B2 R1 G1 B1
+                    (((a.R & mask) >> bit) << 5) |
+                    (((a.G & mask) >> bit) << 4) |
+                    (((a.B & mask) >> bit) << 3) |
+                    (((b.R & mask) >> bit) << 2) |
+                    (((b.G & mask) >> bit) << 1) |
+                    (((b.B & mask) >> bit) << 0);     //R2 G2 B2 R1 G1 B1
                 #endif
                 i++;
             }
