@@ -4,6 +4,9 @@
 Quiangli 64x64 3mm pixel pitch HUB75E led matrix. 
 Many 64x64 matricies have ABCDE directly encode row numbers. These ones control a shift register with ABC, and have direct selection with D and E.
 
+A picture is worth a thousand words, and this demo video shows you thousands of pictures in quick succession: 
+[![Alt text](https://img.youtube.com/vi/PHin3-J1Fls/0.jpg)](https://www.youtube.com/watch?v=PHin3-J1Fls)
+
 ## Pin Mapping
 STM32F407VG Discovery Board -> 3.3v to 5v level shifters -> LED Matrix
 
